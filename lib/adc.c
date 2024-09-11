@@ -73,7 +73,7 @@ void adc_task(void *pvParameters)
             );
 
 
-            
+             xQueueSend(queue, packet, (TickType_t)0);
 
 
             // Delay for 10 ms
