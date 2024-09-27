@@ -22,7 +22,7 @@
 //#define WIFI_PASS "@sv22022"
 
 /* Constants that aren't configurable in menuconfig */
-#define WEB_SERVER "192.168.45.42"
+#define WEB_SERVER "192.168.88.178"
 #define WEB_PORT "5000"
 #define WEB_PATH "/api/new-record"
 
@@ -34,10 +34,10 @@ static const char *TAG = "example";
 extern char *payload;
 
 
-
+int create_connection(int *server_socket);
 void http_get_task(void *pvParameters);
 
-int sendToServer(int socket, char* packet, int len);
+int sendToServer(int socket,unsigned char* packet, int len);
 char *copyString(char s[], int len);
 char *createJsonBody(int timestamp, char *pir_id, char *pirs_vol);
 #endif // __HTTP_H_

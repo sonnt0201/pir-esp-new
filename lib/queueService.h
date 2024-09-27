@@ -16,8 +16,8 @@
 #define Q_PIR2 4
 #define Q_PIR3 5
 #define Q_PIR4 6
-#define ITEMS_NUM 30
-#define ITEM_SIZE 12
+#define ITEMS_NUM 20
+#define ITEM_SIZE 16
 extern QueueHandle_t queue;
 
 

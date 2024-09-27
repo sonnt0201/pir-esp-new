@@ -22,7 +22,7 @@ void app_main()
 
    
     xTaskCreatePinnedToCore(adc_task, "adc_task", 8196, NULL, 1, NULL, 0); // Chạy task adc_task ở core 0
-    xTaskCreatePinnedToCore(http_get_task, "http_post_task", 8192, NULL, 13, NULL, 1); // Chạy task http_post_task ở core 1
+    // xTaskCreatePinnedToCore(http_get_task, "http_post_task", 8192, NULL, 13, NULL, 1); // Chạy task http_post_task ở core 1
 
     
 }

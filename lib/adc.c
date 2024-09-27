@@ -17,6 +17,19 @@ int encodePIRVols(
 void adc_task(void *pvParameters)
 {
 
+    // *************** INTEGRATE TCP CONNECTION TASKS ************
+      // char txbuff[4000];
+    int server_socket;
+
+    int rc;
+
+    while ((rc = create_connection(&server_socket)) != 0)
+    {
+        printf("Trying to connect to server ...\n");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+
+
     // Configure ADC1 channels for full range with 11 dB attenuation
     adc1_config_width(ADC_WIDTH_BIT_12); // Set ADC resolution to 12 bits
 
@@ -31,7 +44,7 @@ void adc_task(void *pvParameters)
 
   
 
-    
+    unsigned char packet[12] = "abcdef";
 
     TickType_t GetTick = xTaskGetTickCount();
     while (1)
@@ -60,8 +73,8 @@ void adc_task(void *pvParameters)
 
             // sprintf(&StrPir4[i * 5], "%04d%c", raw_data4, (i != 99 ? '_' : '\0'));
 
-            __uint8_t packet[12] = "";
-
+           
+            // packet[12] = '\0';
             int rc = encodePIRVols(
                 (__uint8_t) i,
                 (__uint16_t) raw_data0,
@@ -69,15 +82,17 @@ void adc_task(void *pvParameters)
                 (__uint16_t) raw_data2,
                 (__uint16_t) raw_data3,
                 (__uint16_t) raw_data4,
-                &packet
+                packet
             );
 
-
-             xQueueSend(queue, packet, (TickType_t)0);
-
+            sendToServer(server_socket, packet, 12);
+           
+            // for (int j = 0; j < 12; j++) printf("%x ", packet[j]);
+            // printf("\n");
+            //  printf("%d %d %d %d %d\n", raw_data0, raw_data1, raw_data2, raw_data3, raw_data4);
 
             // Delay for 10 ms
-            vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(20));
             // vTaskDelayUntil(&GetTick,10);
         }
 

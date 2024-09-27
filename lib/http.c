@@ -9,13 +9,12 @@ const struct addrinfo hints = {
 };
 // Function to copy the string
 
-
-
 // return 0 if successful
-int create_connection(int *server_socket) {
+int create_connection(int *server_socket)
+{
     struct addrinfo *res;
     struct in_addr *addr;
-    int   r;
+    int r;
 
     char *request = malloc(700);
 
@@ -32,7 +31,7 @@ int create_connection(int *server_socket) {
     addr = &((struct sockaddr_in *)res->ai_addr)->sin_addr;
     // ESP_LOGI(TAG, "DNS lookup succeeded. IP=%s", inet_ntoa(*addr));
 
-   *server_socket = socket(res->ai_family, res->ai_socktype, 0);
+    *server_socket = socket(res->ai_family, res->ai_socktype, 0);
     if (*server_socket < 0)
     {
         ESP_LOGE(TAG, "... Failed to allocate socket.");
@@ -67,64 +66,54 @@ int create_connection(int *server_socket) {
         return -1;
     }
 
-  
-
     return 0;
 };
 
-
 // hàm ok, đã tự giải phóng các biến nội bộ.
-int sendToServer(int socket, char* packet, int len)
+int sendToServer(int socket,unsigned char *packet, int len)
 
 {
-
-  
 
     if (write(socket, packet, len) < 0)
     {
         ESP_LOGE(TAG, "... socket send failed");
 
-      
         vTaskDelay(2 / portTICK_PERIOD_MS);
         return -1;
     }
 
     return 0;
-
-   
-  
 };
 
 void http_get_task(void *pvParameters)
 {
+
+  
 
     // char txbuff[4000];
     int server_socket;
 
     int rc;
 
-    while ((rc = create_connection(&server_socket)) != 0) {
+    while ((rc = create_connection(&server_socket)) != 0)
+    {
         printf("Trying to connect to server ...\n");
-         vTaskDelay(1000 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 
     if (!queue)
         queue = xQueueCreate(ITEMS_NUM, ITEM_SIZE);
 
-   
-
     char rxbuff[12];
-   
+
     while (1)
     {
-        if (xQueueReceive(queue, &rxbuff, (TickType_t)1)) {
-            sendToServer(server_socket, rxbuff, 12);
+        if (xQueueReceive(queue, &rxbuff, (TickType_t)1))
+        {
+            sendToServer(server_socket,(unsigned char*) rxbuff, 12);
         };
     };
-
 }
-
-
 
 // đã giải phóng bộ nhớ cho mọi biến nội bộ.
 char *createJsonBody(int timestamp, char *pir_id, char *pirs_vol)
@@ -139,12 +128,12 @@ char *createJsonBody(int timestamp, char *pir_id, char *pirs_vol)
 
     char *out = cJSON_Print(root);
     cJSON_Delete(root);
-    return (char*)out;
+    return (char *)out;
 }
 
 // Function to copy the string
 char *copyString(char s[], int len)
 {
-  
+
     return strdup(s);
 }
