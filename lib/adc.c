@@ -18,16 +18,8 @@ void adc_task(void *pvParameters)
 {
 
     // *************** INTEGRATE TCP CONNECTION TASKS ************
-      // char txbuff[4000];
-    int server_socket;
-
-    int rc;
-
-    while ((rc = create_connection(&server_socket)) != 0)
-    {
-        printf("Trying to connect to server ...\n");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
+     
+  
 
 
     // Configure ADC1 channels for full range with 11 dB attenuation
@@ -50,8 +42,7 @@ void adc_task(void *pvParameters)
     while (1)
     {
 
-        if (queue == NULL)
-            xQueueCreate(ITEMS_NUM, ITEM_SIZE);
+        
 
         time_t timestamp = get_current_timestamp();
         for (int i = 0; i < 100; i++)
@@ -73,26 +64,23 @@ void adc_task(void *pvParameters)
 
             // sprintf(&StrPir4[i * 5], "%04d%c", raw_data4, (i != 99 ? '_' : '\0'));
 
+           printf("$%d,%d,%d,%d,%d\n", raw_data0, raw_data1, raw_data2, raw_data3, raw_data4);
            
             // packet[12] = '\0';
-            int rc = encodePIRVols(
-                (__uint8_t) i,
-                (__uint16_t) raw_data0,
-                (__uint16_t) raw_data1,
-                (__uint16_t) raw_data2,
-                (__uint16_t) raw_data3,
-                (__uint16_t) raw_data4,
-                packet
-            );
+            // int rc = encodePIRVols(
+            //     (__uint8_t) i,
+            //     (__uint16_t) raw_data0,
+            //     (__uint16_t) raw_data1,
+            //     (__uint16_t) raw_data2,
+            //     (__uint16_t) raw_data3,
+            //     (__uint16_t) raw_data4,
+            //     packet
+            // );
 
-            sendToServer(server_socket, packet, 12);
-           
-            // for (int j = 0; j < 12; j++) printf("%x ", packet[j]);
-            // printf("\n");
-            //  printf("%d %d %d %d %d\n", raw_data0, raw_data1, raw_data2, raw_data3, raw_data4);
-
+            // if (i % 10 == 0)sendViaSerialPort(packet, 12);
+         
             // Delay for 10 ms
-            vTaskDelay(pdMS_TO_TICKS(20));
+            vTaskDelay(pdMS_TO_TICKS(100));
             // vTaskDelayUntil(&GetTick,10);
         }
 

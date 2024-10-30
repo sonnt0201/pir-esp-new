@@ -10,15 +10,15 @@
 
 void app_main()
 {
-    // adcQueue = xQueueCreate(10, sizeof(char *));
+    
 
     // QueueHandle_t adcQueue = xQueueCreate(10, sizeof(int));
-    ESP_ERROR_CHECK(nvs_flash_init());
-    connect_to_wifi();
-    initialize_sntp();
+    // ESP_ERROR_CHECK(nvs_flash_init());
+    // connect_to_wifi();
+    // initialize_sntp();
   
 
-    wait_for_time();
+    // wait_for_time();
 
    
     xTaskCreatePinnedToCore(adc_task, "adc_task", 8196, NULL, 1, NULL, 0); // Chạy task adc_task ở core 0

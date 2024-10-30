@@ -36,7 +36,7 @@ extern char *payload;
 
 int create_connection(int *server_socket);
 void http_get_task(void *pvParameters);
-
+void sendViaSerialPort(unsigned char* rxbuff, int len);
 int sendToServer(int socket,unsigned char* packet, int len);
 char *copyString(char s[], int len);
 char *createJsonBody(int timestamp, char *pir_id, char *pirs_vol);

@@ -85,6 +85,16 @@ int sendToServer(int socket,unsigned char *packet, int len)
     return 0;
 };
 
+
+void sendViaSerialPort(unsigned char* rxbuff, int len) {
+    printf("%d",255);
+    for (int j = 0; j < len; j++) {
+        printf("%d",rxbuff[j]);
+    };
+    // printf("%c",'%');
+
+};
+
 void http_get_task(void *pvParameters)
 {
 
@@ -95,11 +105,11 @@ void http_get_task(void *pvParameters)
 
     int rc;
 
-    while ((rc = create_connection(&server_socket)) != 0)
-    {
-        printf("Trying to connect to server ...\n");
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
+    // while ((rc = create_connection(&server_socket)) != 0)
+    // {
+    //     printf("Trying to connect to server ...\n");
+    //     vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // }
 
     if (!queue)
         queue = xQueueCreate(ITEMS_NUM, ITEM_SIZE);
@@ -110,7 +120,9 @@ void http_get_task(void *pvParameters)
     {
         if (xQueueReceive(queue, &rxbuff, (TickType_t)1))
         {
-            sendToServer(server_socket,(unsigned char*) rxbuff, 12);
+            // sendToServer(server_socket,(unsigned char*) rxbuff, 12);
+            sendViaSerialPort((unsigned char*) rxbuff, 12);
+
         };
     };
 }
